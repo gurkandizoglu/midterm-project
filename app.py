@@ -37,7 +37,7 @@ def hello():
         conn.close()
 
         return jsonify({
-            "message": "Hello! Veritabanına KeyVault şifresiyle başarıyla bağlanıldı.",
+            "message": "Hello! Connection is Successfull to database via KeyVault password.",
             "db_version": db_version[0]
         })
 
