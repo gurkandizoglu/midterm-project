@@ -6,25 +6,23 @@ from azure.keyvault.secrets import SecretClient
 
 app = Flask(__name__)
 
-
-VAULT_URL = "https://kv-midterm-g5-124273.vault.azure.net/"
-DB_HOST = "gvo14-mid.postgres.database.azure.com"
-DB_NAME = "postgres"
-DB_USER = "psqladmin"
+VAULT_URL = os.environ["VAULT_URL"]
 
 @app.route('/hello', methods=['GET'])
 def hello():
     try:
-        
         credential = DefaultAzureCredential()
         client = SecretClient(vault_url=VAULT_URL, credential=credential)
+
+        db_host = client.get_secret("db-host").value
+        db_name = client.get_secret("db-name").value
+        db_user = client.get_secret("db-user").value
         db_password = client.get_secret("db-password").value
 
-        
         conn = psycopg2.connect(
-            host=DB_HOST,
-            database=DB_NAME,
-            user=DB_USER,
+            host=db_host,
+            database=db_name,
+            user=db_user,
             password=db_password,
             sslmode='require'
         )
